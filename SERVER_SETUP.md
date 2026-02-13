@@ -1,0 +1,113 @@
+# Server Deployment Guide
+
+Follow these steps to deploy the EduCenter Pro Admin application to your remote server (e.g., AWS EC2, DigitalOcean Droplet, VPS).
+
+## Prerequisites
+
+- Access to a Linux server (Ubuntu recommended).
+- `git` installed on the server.
+- `docker` and `docker-compose` installed on the server.
+
+## Step 1: Connect to your Server
+
+SSH into your server:
+```bash
+ssh user@your-server-ip
+```
+
+## Step 2: Install Docker (if not installed)
+
+If you haven't installed Docker yet, run these commands (for Ubuntu):
+
+```bash
+# Update packages
+sudo apt-get update
+
+# Install Docker
+sudo apt-get install -y docker.io docker-compose
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add user to docker group (optional, to run without sudo)
+sudo usermod -aG docker $USER
+# You might need to log out and log back in for this to take effect
+```
+
+## Step 3: Clone the Repository
+
+Clone your project from GitHub:
+
+```bash
+git clone https://github.com/muhammadsodiqadhamov307-droid/educenter-pro-admin.git
+cd educenter-pro-admin
+```
+
+## Step 4: Configure Environment Variables
+
+Create a `.env` file in the project directory. This file will be read by Docker.
+
+```bash
+nano .env
+```
+
+Paste the following content (adjust the `API_KEY`):
+
+```env
+# Database Internal URL (for Docker container)
+DATABASE_URL="postgresql://postgres:postgres@db:5432/educenter?schema=public"
+
+# Your Google Gemini API Key
+API_KEY="AIzaSy..."
+
+# Port
+PORT=3000
+```
+
+Press `Ctrl+O`, `Enter` to save, and `Ctrl+X` to exit.
+
+## Step 5: Build and Run
+
+Start the application using Docker Compose. This command builds the image and starts the containers in the background.
+
+```bash
+sudo docker-compose up -d --build
+```
+
+## Step 6: Initialize Database
+
+Once the containers are running, you need to push the database schema to the PostgreSQL database running inside Docker.
+
+```bash
+sudo docker-compose exec app npx prisma db push
+```
+
+## Step 7: Verify Deployment
+
+Your application should now be running!
+
+- Open your browser and visit: `http://your-server-ip:3000`
+- API is available at: `http://your-server-ip:3000/api/users`
+
+## Troubleshooting
+
+- **Check Logs:**
+  ```bash
+  sudo docker-compose logs -f
+  ```
+- **Restart Application:**
+  ```bash
+  sudo docker-compose restart
+  ```
+- **Stop Application:**
+  ```bash
+  sudo docker-compose down
+  ```
+
+## Security Note for Production
+
+For a real production environment, you should:
+1.  Change the database password in `.env` and `docker-compose.yml`.
+2.  Set up Nginx as a reverse proxy with SSL (HTTPS).
+3.  Do not expose the database port (5432) in `docker-compose.yml` if external access isn't needed (remove the `ports` section under `db`).
