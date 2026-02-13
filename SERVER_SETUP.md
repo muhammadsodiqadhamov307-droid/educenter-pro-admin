@@ -133,9 +133,50 @@ Your application should now be running!
   sudo docker-compose down
   ```
 
-## Security Note for Production
+## Step 8: Production Setup (Domain & SSL)
 
-For a real production environment, you should:
-1.  Change the database password in `.env` and `docker-compose.yml`.
-2.  Set up Nginx as a reverse proxy with SSL (HTTPS).
-3.  Do not expose the database port (5432) in `docker-compose.yml` if external access isn't needed (remove the `ports` section under `db`).
+**Pre-requisites:**
+- You have purchased a domain name (e.g., `my-edu-center.com`).
+- You have configured the DNS A record for your domain to point to your server's IP address.
+
+### 1. Edit Configuration Files
+On your server (`nano` or `vim`):
+
+**A. Edit `nginx-conf/app.conf`**
+Replace `example.com` with your actual domain name in both `server` blocks.
+
+```bash
+nano nginx-conf/app.conf
+```
+
+**B. Edit `init-letsencrypt.sh`**
+Replace `domains=(example.com www.example.com)` with your actual domain(s).
+Add your email to `email=""` for urgent renewal notices.
+
+```bash
+nano init-letsencrypt.sh
+```
+
+### 2. Run SSL Initialization
+This script automates the process of getting certificates from Let's Encrypt.
+
+```bash
+chmod +x init-letsencrypt.sh
+sudo ./init-letsencrypt.sh
+```
+
+### 3. Start Production Containers
+Use the production compose file which enables Nginx and hides the database port.
+
+```bash
+sudo docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+### 4. Initialize Database (if starting fresh)
+
+```bash
+sudo docker-compose -f docker-compose.prod.yml exec app npx prisma db push
+```
+
+**Security Note:**
+Ensure your server's firewall (AWS Security Group) allows inbound traffic on ports **80 (HTTP)** and **443 (HTTPS)**, and **blocks** port **3000** and **5432** from external access.

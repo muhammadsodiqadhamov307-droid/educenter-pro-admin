@@ -1,20 +1,84 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# EduCenter Pro Admin
 
-This contains everything you need to run your app locally.
+Administrative dashboard for education centers, featuring student/teacher management, course scheduling, and AI-powered tools.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1gaV_KBFyl9aru82ZStnFo1DfxMq9ZpLV
+## Features
 
-## Run Locally
+- **User Management**: Manage students and teachers.
+- **Course Management**: Create and manage courses with AI-powered descriptions.
+- **Group Management**: Organize classes and schedules.
+- **AI Tools**: Generate course descriptions and bot prompts using Google Gemini.
+- **Full Stack**: React frontend + Express backend + PostgreSQL database.
 
-**Prerequisites:**  Node.js
+## Prerequisites
 
+- Node.js (v18+)
+- PostgreSQL (v14+) OR Docker
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Local Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/muhammadsodiqadhamov307-droid/educenter-pro-admin.git
+    cd educenter-pro-admin
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Configuration:**
+    Create a `.env` file in the root directory:
+    ```env
+    DATABASE_URL="postgresql://user:password@localhost:5432/educenter?schema=public"
+    API_KEY="your_google_gemini_api_key"
+    PORT=3000
+    ```
+    *Note: If you don't have a local Postgres, you can use Docker (see below).*
+
+4.  **Database Setup:**
+    ```bash
+    npx prisma generate
+    npx prisma db push
+    ```
+
+5.  **Run Locally:**
+    You can run the frontend and backend separately or together.
+    
+    **Development (Frontend + Backend):**
+    ```bash
+    # Open two terminals
+    npm run dev      # Frontend (http://localhost:5173)
+    npm run server   # Backend (http://localhost:3000)
+    ```
+
+## Docker Setup (Recommended)
+
+1.  **Run with Docker Compose:**
+    ```bash
+    docker-compose up --build
+    ```
+    This will start the application on `http://localhost:3000` and a PostgreSQL database.
+
+## Deployment
+
+1.  **Build for Production:**
+    ```bash
+    npm run build
+    ```
+
+2.  **Start Production Server:**
+    ```bash
+    npm start
+    ```
+
+## Project Structure
+
+- `src/`: React Frontend
+- `server/`: Express Backend
+- `prisma/`: Database Schema
+- `components/`: UI Components
+- `services/`: API Services
+
