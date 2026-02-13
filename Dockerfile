@@ -1,8 +1,10 @@
-
 # Build Stage
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 
 WORKDIR /app
+
+# Install OpenSSL (required for Prisma)
+RUN apt-get update -y && apt-get install -y openssl
 
 COPY package*.json ./
 RUN npm install
@@ -23,9 +25,12 @@ RUN npm run build
 RUN npx tsc server/index.ts --outDir dist-server --esModuleInterop --skipLibCheck
 
 # Production Stage
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 
 WORKDIR /app
+
+# Install OpenSSL in runner too
+RUN apt-get update -y && apt-get install -y openssl
 
 COPY package*.json ./
 RUN npm install --production
