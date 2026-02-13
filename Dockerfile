@@ -17,12 +17,7 @@ RUN npx prisma generate
 # Build frontend
 RUN npm run build
 
-# Compile backend
-# Since we are using tsx/ts-node for dev, for prod we might want to compile or just run with tsx/ts-node.
-# For simplicity and smallest image, let's compile if possible, or just use tsx in production.
-# Given the setup, let's use a simple approach: running with tsx in production for now or compiling.
-# Let's compile server to JS for better performance.
-RUN npx tsc server/index.ts --outDir dist-server --esModuleInterop --skipLibCheck
+
 
 # Production Stage
 FROM node:20-slim AS runner
