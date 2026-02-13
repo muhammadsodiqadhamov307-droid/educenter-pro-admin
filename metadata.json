@@ -1,0 +1,7 @@
+{
+  "name": "EduCenter Pro Admin",
+  "description": "A high-end management dashboard for study centers, featuring student/teacher registration, course management, group organization, and an AI prompt generator for backend/bot development.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

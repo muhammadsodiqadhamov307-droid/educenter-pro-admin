@@ -1,0 +1,73 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+enum UserStatus {
+  ACTIVE
+  DRAFT
+}
+
+enum StudyTime {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
+model User {
+  id            String      @id @default(uuid())
+  name          String
+  phone         String
+  email         String      @unique
+  telegram      String?
+  preferredTime StudyTime?
+  role          Role
+  joinedAt      DateTime    @default(now())
+  status        UserStatus  @default(DRAFT)
+  specialty     String?
+  
+  // Relations
+  courseId      String?
+  course        Course?     @relation(fields: [courseId], references: [id])
+  
+  // Implicit many-to-many for groups (students in groups)
+  groups        Group[]     @relation("StudentGroups")
+  
+  // One-to-many for groups (teacher of groups)
+  teachingGroups Group[]    @relation("TeacherGroups")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  duration    String
+  category    String
+  
+  users       User[]
+  groups      Group[]
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String
+  schedule  String
+  
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  
+  teacherId String
+  teacher   User     @relation("TeacherGroups", fields: [teacherId], references: [id])
+  
+  students  User[]   @relation("StudentGroups")
+}
