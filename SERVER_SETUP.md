@@ -15,24 +15,47 @@ SSH into your server:
 ssh user@your-server-ip
 ```
 
-## Step 2: Install Docker (if not installed)
+## Step 2: Install Docker and Git
 
-If you haven't installed Docker yet, run these commands (for Ubuntu):
+### For Amazon Linux 2023 (AWS EC2)
 
 ```bash
 # Update packages
-sudo apt-get update
+sudo dnf update -y
 
-# Install Docker
-sudo apt-get install -y docker.io docker-compose
+# Install Git and Docker
+sudo dnf install -y git docker
 
 # Start and enable Docker
 sudo systemctl start docker
 sudo systemctl enable docker
 
-# Add user to docker group (optional, to run without sudo)
+# Add user to docker group (allows running docker without sudo)
+sudo usermod -aG docker ec2-user
+
+# Install Docker Compose
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Apply group changes (or log out and log back in)
+newgrp docker
+```
+
+### For Ubuntu / Debian
+
+```bash
+# Update packages
+sudo apt-get update
+
+# Install Docker and Git
+sudo apt-get install -y docker.io docker-compose git
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add user to docker group
 sudo usermod -aG docker $USER
-# You might need to log out and log back in for this to take effect
 ```
 
 ## Step 3: Clone the Repository
