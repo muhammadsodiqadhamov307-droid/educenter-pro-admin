@@ -136,29 +136,18 @@ Your application should now be running!
 ## Step 8: Production Setup (Domain & SSL)
 
 **Pre-requisites:**
-- You have purchased a domain name (e.g., `my-edu-center.com`).
-- You have configured the DNS A record for your domain to point to your server's IP address.
+- You have configured the DNS for `registrationadmin.duckdns.org` to point to your server's IP address.
 
-### 1. Edit Configuration Files
-On your server (`nano` or `vim`):
+### 1. Update Configuration
+I have already updated the configuration files for your domain (`registrationadmin.duckdns.org`) in the repository. You just need to pull the changes.
 
-**A. Edit `nginx-conf/app.conf`**
-Replace `example.com` with your actual domain name in both `server` blocks.
-
+On your server:
 ```bash
-nano nginx-conf/app.conf
-```
-
-**B. Edit `init-letsencrypt.sh`**
-Replace `domains=(example.com www.example.com)` with your actual domain(s).
-Add your email to `email=""` for urgent renewal notices.
-
-```bash
-nano init-letsencrypt.sh
+git pull
 ```
 
 ### 2. Run SSL Initialization
-This script automates the process of getting certificates from Let's Encrypt.
+This script automates the process of getting certificates from Let's Encrypt for `registrationadmin.duckdns.org`.
 
 ```bash
 chmod +x init-letsencrypt.sh
