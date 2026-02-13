@@ -38,8 +38,11 @@ sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Install Docker Buildx (Required for Compose Build)
+# Detect architecture (amd64 or arm64/aarch64)
+ARCH=$(uname -m)
+if [ "$ARCH" = "x86_64" ]; then ARCH="amd64"; elif [ "$ARCH" = "aarch64" ]; then ARCH="arm64"; fi
 sudo mkdir -p /usr/local/lib/docker/cli-plugins
-sudo curl -SL https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64 -o /usr/local/lib/docker/cli-plugins/docker-buildx
+sudo curl -SL "https://github.com/docker/buildx/releases/latest/download/buildx-linux-$ARCH" -o /usr/local/lib/docker/cli-plugins/docker-buildx
 sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 
 # Apply group changes (or log out and log back in)
@@ -80,11 +83,15 @@ Create a `.env` file in the project directory. This file will be read by Docker.
 nano .env
 ```
 
-Paste the following content (adjust the `API_KEY`):
+Paste the following content (adjust the `API_KEY` and `POSTGRES_PASSWORD`):
 
 ```env
 # Database Internal URL (for Docker container)
-DATABASE_URL="postgresql://postgres:postgres@db:5432/educenter?schema=public"
+# NOTE: Ensure the password matches POSTGRES_PASSWORD below
+DATABASE_URL="postgresql://postgres:mysecretpassword@db:5432/educenter?schema=public"
+
+# Database Password (Required for Production)
+POSTGRES_PASSWORD="mysecretpassword"
 
 # Your Google Gemini API Key
 API_KEY="AIzaSy..."
