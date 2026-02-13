@@ -178,6 +178,9 @@ app.get(/.*/, (req, res) => {
     res.sendFile(path.join(path.dirname(fileURLToPath(import.meta.url)), '../dist/index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`Server is starting...`);
+    console.log(`Environment PORT: ${process.env.PORT}`);
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Listening on 0.0.0.0:${PORT}`);
 });
