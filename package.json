@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npx tsc server/index.ts --outDir dist-server --esModuleInterop --skipLibCheck --target ES2022",
+    "build": "vite build && npx tsc -p tsconfig.server.json",
     "preview": "vite preview",
     "start": "node dist-server/index.js",
     "server": "npx tsx server/index.ts"
