@@ -9,6 +9,9 @@ RUN npm install
 
 COPY . .
 
+# Generate Prisma Client for build
+RUN npx prisma generate
+
 # Build frontend
 RUN npm run build
 
@@ -17,7 +20,7 @@ RUN npm run build
 # For simplicity and smallest image, let's compile if possible, or just use tsx in production.
 # Given the setup, let's use a simple approach: running with tsx in production for now or compiling.
 # Let's compile server to JS for better performance.
-RUN npx tsc server/index.ts --outDir dist-server --esModuleInterop
+RUN npx tsc server/index.ts --outDir dist-server --esModuleInterop --skipLibCheck
 
 # Production Stage
 FROM node:20-alpine AS runner

@@ -139,7 +139,7 @@ app.post('/api/ai/generate-description', async (req, res) => {
             model: 'gemini-2.0-flash',
             contents: `O'quv markazi uchun "${courseTitle}" nomli kurs haqida professional va qiziqarli 2 jumlali tavsif matnini O'ZBEK tilida yarating.`,
         });
-        res.json({ text: response.text() });
+        res.json({ text: response.text });
     } catch (error) {
         console.error("AI Error:", error);
         res.status(500).json({ error: 'AI generation failed' });
@@ -157,7 +157,7 @@ app.post('/api/ai/generate-prompt', async (req, res) => {
             model: 'gemini-2.0-flash',
             contents: `Siz jahon miqyosidagi senior full-stack muhandissiz. Quyidagi talablar asosida Telegram bot va Express API backendini qurish uchun AI Koder (Cursor yoki Windsurf kabi) uchun juda batafsil texnik promt yozing. Promt ingliz tilida bo'lishi mumkin (dasturlash uchun qulay), lekin tizim o'zbek tilini qo'llab-quvvatlashi kerak. Talablar: ${requirements}. Ma'lumotlar bazasi (PostgreSQL), xavfsizlik va API endpointlar tuzilmasini kiriting.`,
         });
-        res.json({ text: response.text() });
+        res.json({ text: response.text });
     } catch (error) {
         console.error("AI Error:", error);
         res.status(500).json({ error: 'AI generation failed' });
